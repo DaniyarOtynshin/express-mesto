@@ -20,10 +20,37 @@ const getProfile = (req, res) => User.findOne({ _id: req.params.id })
 const createUser = (req, res) => {
   User.create({ ...req.body })
     .then((user) => {
-      console.log(user);
       res.status(200).send(user);
     })
     .catch((error) => console.error(error));
 };
 
-module.exports = { getUsers, getProfile, createUser };
+const updateProfile = (req, res) => {
+  User.findByIdAndUpdate(
+    req.params.cardId,
+    { ...req.body },
+  )
+    .then((user) => {
+      res.status(200).send(user);
+    })
+    .catch((error) => console.error(error));
+};
+
+const updateProfileAvatar = (req, res) => {
+  User.findByIdAndUpdate(
+    req.params.cardId,
+    { ...req.body },
+  )
+    .then((user) => {
+      res.status(200).send(user);
+    })
+    .catch((error) => console.error(error));
+};
+
+module.exports = {
+  getUsers,
+  getProfile,
+  createUser,
+  updateProfile,
+  updateProfileAvatar,
+};
