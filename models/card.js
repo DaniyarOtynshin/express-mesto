@@ -11,6 +11,9 @@ const cardSchema = new Schema({
   },
   link: {
     type: String,
+    validate: {
+      validator: (v) => /^(http(s)?):\/\/(www.)?[a-zA-Z0-9-._~:/?#@!$&'()*+,;=]($#)?/.test(v),
+    },
   },
   owner: {
     type: ObjectId,

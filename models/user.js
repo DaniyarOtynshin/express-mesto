@@ -18,6 +18,9 @@ const userSchema = new Schema({
   avatar: {
     type: String,
     required: true,
+    validate: {
+      validator: (v) => /^(http(s)?):\/\/(www.)?[a-zA-Z0-9-._~:/?#@!$&'()*+,;=]($#)?/.test(v),
+    },
   },
 });
 
