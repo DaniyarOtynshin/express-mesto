@@ -13,11 +13,12 @@ const cardSchema = new Schema({
     type: String,
   },
   owner: {
-    type: [ObjectId],
-    default: [],
+    type: ObjectId,
+    required: true,
   },
   likes: {
-    type: Array,
+    type: [ObjectId],
+    default: [],
   },
   createdAt: {
     type: Date,

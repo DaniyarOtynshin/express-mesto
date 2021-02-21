@@ -1,9 +1,6 @@
-const path = require('path');
-const getDataFromFile = require('../helpers/files');
+const Card = require('../models/card');
 
-const cardsDataPath = path.join(__dirname, '..', 'data', 'cards.json');
-
-const getCards = (req, res) => getDataFromFile(cardsDataPath)
+const getCards = (req, res) => Card.find({})
   .then((cards) => {
     if (!cards) {
       return res.status(404).send({ message: 'Файл не найден' });
@@ -12,4 +9,15 @@ const getCards = (req, res) => getDataFromFile(cardsDataPath)
   })
   .catch((error) => console.error(error));
 
-module.exports = getCards;
+const createCard = (req, res) => {
+  Card.create({ ...req.body, owner: req.user._id })
+    .then((card) => {
+      res.status(200).send(card);
+    })
+    .catch((error) => console.error(error));
+};
+
+module.exports = {
+  getCards,
+  createCard,
+};

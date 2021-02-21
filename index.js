@@ -20,6 +20,12 @@ const cardsRouter = require('./routes/cards');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
+app.use((req, res, next) => {
+  req.user = {
+    _id: '60310979a5d9e313c84919bd',
+  };
+  next();
+});
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 app.use('*', (req, res) => {
