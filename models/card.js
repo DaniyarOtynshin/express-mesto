@@ -13,6 +13,7 @@ const cardSchema = new Schema({
     type: String,
     validate: {
       validator: (v) => /^(http(s)?):\/\/(www.)?[a-zA-Z0-9-._~:/?#@!$&'()*+,;=]($#)?/.test(v),
+      message: 'Enter a valid url address.',
     },
   },
   owner: {

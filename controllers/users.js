@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const User = require('../models/user');
 
 const ERROR_CODE_400 = 400;
@@ -24,17 +25,20 @@ const getUsers = (req, res) => User.find({})
     }
     return res.status(200).send(users);
   })
-  .orFail(new Error('Users are not found!'))
   .catch((error) => returnErrorStatus(error, res));
 
-const getProfile = (req, res) => User.findOne({ _id: req.params.id })
+const getProfile = (req, res) => User.findById(
+  mongoose.Types.ObjectId.isValid(req.params.id)
+    ? mongoose.Types.ObjectId(req.params.id)
+    : mongoose.Types.ObjectId(Number(req.params.id)),
+)
   .then((user) => {
     if (!user) {
       return res.status(404).send({ message: 'User does not exist' });
     }
     return res.status(200).send(user);
   })
-  .catch((error) => returnErrorStatus(error, res));
+  .catch((error) => console.log(error));
 
 const createUser = (req, res) => {
   User.create({ ...req.body })

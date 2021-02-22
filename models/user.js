@@ -20,6 +20,7 @@ const userSchema = new Schema({
     required: true,
     validate: {
       validator: (v) => /^(http(s)?):\/\/(www.)?[a-zA-Z0-9-._~:/?#@!$&'()*+,;=]($#)?/.test(v),
+      message: 'Enter a valid url address.',
     },
   },
 });
