@@ -3,6 +3,7 @@ const User = require('../models/user');
 const {
   returnErrorStatus,
   validateObjectId,
+  isValidObjectId,
 } = require('../utils/utils');
 
 const getUsers = (req, res) => User.find({})
@@ -16,12 +17,14 @@ const getUsers = (req, res) => User.find({})
 
 const getProfile = (req, res) => User.findById(validateObjectId(req.params.id))
   .then((user) => {
-    if (!user) {
-      return res.status(400).send({ message: 'User does not exist' });
+    if (!isValidObjectId(req.params.id)) {
+      res.status(400).send({ message: 'UserId is not valid' });
+    } else if (!user) {
+      res.status(404).send({ message: 'User does not exist' });
     }
     return res.status(200).send(user);
   })
-  .catch((error) => console.log(error));
+  .catch((error) => returnErrorStatus(error, res));
 
 const createUser = (req, res) => {
   User.create({ ...req.body })
@@ -35,12 +38,13 @@ const updateProfile = (req, res) => {
   User.findByIdAndUpdate(
     req.params.cardId,
     { ...req.body },
+    { runValidators: true, context: 'query' },
   )
     .then((user) => {
-      console.log(req.body);
+      console.log(user);
       res.status(200).send(user);
     })
-    .catch((error) => console.log(Object.keys(error.errors)));
+    .catch((error) => console.log(error));
 };
 
 const updateProfileAvatar = (req, res) => {

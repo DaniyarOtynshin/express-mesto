@@ -26,7 +26,6 @@ const createCard = (req, res) => {
 const deleteCard = (req, res) => {
   Card.deleteOne({ _id: validateObjectId(req.params.cardId) })
     .then((response) => {
-      console.log(isValidObjectId(req.params.cardId));
       if (!isValidObjectId(req.params.cardId)) {
         res.status(400).send({ message: 'CardId is not valid' });
       } else if (response.n === 0) {
