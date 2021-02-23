@@ -1,6 +1,9 @@
 const Card = require('../models/card');
 
 const {
+  SUCCESS_CODE_200,
+  ERROR_CODE_400,
+  ERROR_CODE_404,
   returnErrorStatus,
   validateObjectId,
   isValidObjectId,
@@ -9,16 +12,16 @@ const {
 const getCards = (req, res) => Card.find({})
   .then((cards) => {
     if (!cards.length) {
-      return res.status(404).send({ message: 'Cards are not found' });
+      return res.status(ERROR_CODE_404).send({ message: 'Cards are not found' });
     }
-    return res.status(200).send(cards);
+    return res.status(SUCCESS_CODE_200).send(cards);
   })
   .catch((error) => returnErrorStatus(error, res));
 
 const createCard = (req, res) => {
   Card.create({ ...req.body, owner: req.user._id })
     .then((card) => {
-      res.status(200).send(card);
+      res.status(SUCCESS_CODE_200).send(card);
     })
     .catch((error) => returnErrorStatus(error, res));
 };
@@ -27,11 +30,11 @@ const deleteCard = (req, res) => {
   Card.deleteOne({ _id: validateObjectId(req.params.cardId) })
     .then((response) => {
       if (!isValidObjectId(req.params.cardId)) {
-        res.status(400).send({ message: 'CardId is not valid' });
+        res.status(ERROR_CODE_400).send({ message: 'CardId is not valid' });
       } else if (response.n === 0) {
-        res.status(404).send({ message: 'Card is not found' });
+        res.status(ERROR_CODE_404).send({ message: 'Card is not found' });
       }
-      res.status(200).send(response);
+      res.status(SUCCESS_CODE_200).send(response);
     })
     .catch((error) => returnErrorStatus(error, res));
 };
@@ -48,11 +51,11 @@ const likeCard = (req, res) => {
   )
     .then((card) => {
       if (!isValidObjectId(req.params.cardId)) {
-        res.status(400).send({ message: 'CardId is not valid' });
+        res.status(ERROR_CODE_400).send({ message: 'CardId is not valid' });
       } else if (!card) {
-        res.status(404).send({ message: 'Card is not found' });
+        res.status(ERROR_CODE_404).send({ message: 'Card is not found' });
       }
-      res.status(200).send(card);
+      res.status(SUCCESS_CODE_200).send(card);
     })
     .catch((error) => returnErrorStatus(error, res));
 };
@@ -69,11 +72,11 @@ const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!isValidObjectId(req.params.cardId)) {
-        res.status(400).send({ message: 'CardId is not valid' });
+        res.status(ERROR_CODE_400).send({ message: 'CardId is not valid' });
       } else if (!card) {
-        res.status(404).send({ message: 'Card is not found' });
+        res.status(ERROR_CODE_404).send({ message: 'Card is not found' });
       }
-      res.status(200).send(card);
+      res.status(SUCCESS_CODE_200).send(card);
     })
     .catch((error) => returnErrorStatus(error, res));
 };

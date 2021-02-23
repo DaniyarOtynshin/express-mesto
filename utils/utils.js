@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
+const SUCCESS_CODE_200 = 200;
 const ERROR_CODE_400 = 400;
 const ERROR_CODE_404 = 404;
-const ERROR_CODE_500 = 500;
 
 const returnErrorStatus = (error, res) => {
   switch (error.kind || Object.keys(error.errors)[0]) {
@@ -33,4 +33,7 @@ module.exports = {
   returnErrorStatus,
   validateObjectId,
   isValidObjectId,
+  ERROR_CODE_400,
+  ERROR_CODE_404,
+  SUCCESS_CODE_200,
 };
