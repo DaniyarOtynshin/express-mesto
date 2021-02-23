@@ -35,23 +35,31 @@ const createUser = (req, res) => {
 };
 
 const updateProfile = (req, res) => {
-  User.findByIdAndUpdate(
-    req.params.cardId,
+  User.findOneAndUpdate(
+    { _id: validateObjectId(req.params.id) },
     { ...req.body },
-    { runValidators: true, context: 'query' },
+    {
+      runValidators: true,
+      new: true,
+    },
   )
+    .orFail(() => res.status(400).send('Request is invalid'))
     .then((user) => {
-      console.log(user);
       res.status(200).send(user);
     })
-    .catch((error) => console.log(error));
+    .catch((error) => returnErrorStatus(error, res));
 };
 
 const updateProfileAvatar = (req, res) => {
-  User.findByIdAndUpdate(
-    req.params.cardId,
+  User.findOneAndUpdate(
+    { _id: validateObjectId(req.params.id) },
     { ...req.body },
+    {
+      runValidators: true,
+      new: true,
+    },
   )
+    .orFail(() => res.status(400).send('Request is invalid'))
     .then((user) => {
       res.status(200).send(user);
     })
