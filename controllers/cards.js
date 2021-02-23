@@ -1,26 +1,15 @@
 const Card = require('../models/card');
 
-const ERROR_CODE_400 = 400;
-const ERROR_CODE_404 = 404;
-const ERROR_CODE_500 = 500;
-
-const returnErrorStatus = (error, res) => {
-  switch (error.statusCode) {
-    case 400:
-      return res.status(ERROR_CODE_400).send(error);
-    case 404:
-      return res.status(ERROR_CODE_404).send(error);
-    case 500:
-      return res.status(ERROR_CODE_500).send(error);
-    default:
-      return res.status(error.statusCode).send(error);
-  }
-};
+const {
+  returnErrorStatus,
+  validateObjectId,
+  isValidObjectId,
+} = require('../utils/utils');
 
 const getCards = (req, res) => Card.find({})
   .then((cards) => {
     if (!cards.length) {
-      return res.status(ERROR_CODE_404).send({ message: 'Cards are not found' });
+      return res.status(404).send({ message: 'Cards are not found' });
     }
     return res.status(200).send(cards);
   })
@@ -35,20 +24,35 @@ const createCard = (req, res) => {
 };
 
 const deleteCard = (req, res) => {
-  Card.deleteOne({ _id: req.params.cardId })
-    .then((card) => {
-      res.status(200).send(card);
+  Card.deleteOne({ _id: validateObjectId(req.params.cardId) })
+    .then((response) => {
+      console.log(isValidObjectId(req.params.cardId));
+      if (!isValidObjectId(req.params.cardId)) {
+        res.status(400).send({ message: 'CardId is not valid' });
+      } else if (response.n === 0) {
+        res.status(404).send({ message: 'Card is not found' });
+      }
+      res.status(200).send(response);
     })
     .catch((error) => returnErrorStatus(error, res));
 };
 
 const likeCard = (req, res) => {
   Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $addToSet: { likes: req.user._id } },
+    {
+      _id: validateObjectId(req.params.cardId),
+    },
+    {
+      $addToSet: validateObjectId(req.params.cardId),
+    },
     { new: true },
   )
     .then((card) => {
+      if (!isValidObjectId(req.params.cardId)) {
+        res.status(400).send({ message: 'CardId is not valid' });
+      } else if (!card) {
+        res.status(404).send({ message: 'Card is not found' });
+      }
       res.status(200).send(card);
     })
     .catch((error) => returnErrorStatus(error, res));
@@ -56,11 +60,20 @@ const likeCard = (req, res) => {
 
 const dislikeCard = (req, res) => {
   Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $pull: { likes: req.user._id } },
+    ({
+      _id: validateObjectId(req.params.cardId),
+    }),
+    {
+      $pull: validateObjectId(req.params.cardId),
+    },
     { new: true },
   )
     .then((card) => {
+      if (!isValidObjectId(req.params.cardId)) {
+        res.status(400).send({ message: 'CardId is not valid' });
+      } else if (!card) {
+        res.status(404).send({ message: 'Card is not found' });
+      }
       res.status(200).send(card);
     })
     .catch((error) => returnErrorStatus(error, res));

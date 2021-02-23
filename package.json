@@ -1,7 +1,7 @@
 {
   "name": "express-mesto",
   "version": "1.0.0",
-  "description": "`/public` — статика, полученная в результате билда фронтенд-приложения на Реакте  \r `/data` — JSON-файлы для временной эмуляции работы с базой данных  \r `/routes` — папка с файлами роутера",
+  "description": "`/controllers` — папка с js файлами описывающие повидение при ajax запросах  \r `/models` — js файлы описывающие схемы для работы с базой данных  \r `/routes` — папка с файлами роутера",
   "main": "index.js",
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -23,7 +23,7 @@
     "url": "git+https://github.com/DaniyarOtynshin/express-mesto.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Daniyar Otynshin",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/DaniyarOtynshin/express-mesto/issues"
