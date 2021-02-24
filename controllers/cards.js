@@ -30,11 +30,12 @@ const deleteCard = (req, res) => {
   Card.deleteOne({ _id: validateObjectId(req.params.cardId) })
     .then((response) => {
       if (!isValidObjectId(req.params.cardId)) {
-        res.status(ERROR_CODE_400).send({ message: 'CardId is not valid' });
-      } else if (response.n === 0) {
-        res.status(ERROR_CODE_404).send({ message: 'Card is not found' });
+        return res.status(ERROR_CODE_400).send({ message: 'CardId is not valid' });
       }
-      res.status(SUCCESS_CODE_200).send(response);
+      if (response.n === 0) {
+        return res.status(ERROR_CODE_404).send({ message: 'Card is not found' });
+      }
+      return res.status(SUCCESS_CODE_200).send(response);
     })
     .catch((error) => returnErrorStatus(error, res));
 };
@@ -51,11 +52,12 @@ const likeCard = (req, res) => {
   )
     .then((card) => {
       if (!isValidObjectId(req.params.cardId)) {
-        res.status(ERROR_CODE_400).send({ message: 'CardId is not valid' });
-      } else if (!card) {
-        res.status(ERROR_CODE_404).send({ message: 'Card is not found' });
+        return res.status(ERROR_CODE_400).send({ message: 'CardId is not valid' });
       }
-      res.status(SUCCESS_CODE_200).send(card);
+      if (!card) {
+        return res.status(ERROR_CODE_404).send({ message: 'Card is not found' });
+      }
+      return res.status(SUCCESS_CODE_200).send(card);
     })
     .catch((error) => returnErrorStatus(error, res));
 };
@@ -72,11 +74,12 @@ const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!isValidObjectId(req.params.cardId)) {
-        res.status(ERROR_CODE_400).send({ message: 'CardId is not valid' });
-      } else if (!card) {
-        res.status(ERROR_CODE_404).send({ message: 'Card is not found' });
+        return res.status(ERROR_CODE_400).send({ message: 'CardId is not valid' });
       }
-      res.status(SUCCESS_CODE_200).send(card);
+      if (!card) {
+        return res.status(ERROR_CODE_404).send({ message: 'Card is not found' });
+      }
+      return res.status(SUCCESS_CODE_200).send(card);
     })
     .catch((error) => returnErrorStatus(error, res));
 };

@@ -21,9 +21,10 @@ const getUsers = (req, res) => User.find({})
 const getProfile = (req, res) => User.findById(validateObjectId(req.params.id))
   .then((user) => {
     if (!isValidObjectId(req.params.id)) {
-      res.status(ERROR_CODE_400).send({ message: 'UserId is not valid' });
-    } else if (!user) {
-      res.status(ERROR_CODE_404).send({ message: 'User does not exist' });
+      return res.status(ERROR_CODE_400).send({ message: 'UserId is not valid' });
+    }
+    if (!user) {
+      return res.status(ERROR_CODE_404).send({ message: 'User does not exist' });
     }
     return res.status(SUCCESS_CODE_200).send(user);
   })
