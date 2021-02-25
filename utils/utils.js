@@ -5,15 +5,11 @@ const ERROR_CODE_400 = 400;
 const ERROR_CODE_404 = 404;
 
 const returnErrorStatus = (error, res) => {
-  switch (error.kind || Object.keys(error.errors)[0]) {
-    case 'name':
-      return res.status(ERROR_CODE_400).send({ message: error.errors.name.message });
-    case 'link':
-      return res.status(ERROR_CODE_400).send({ message: error.errors.link.message });
-    case 'about':
-      return res.status(ERROR_CODE_400).send({ message: error.errors.about.message });
-    case 'avatar':
-      return res.status(ERROR_CODE_400).send({ message: error.errors.avatar.message });
+  switch (error.kind || error.name || Object.keys(error.errors)[0]) {
+    case 'Error':
+      return res.status(ERROR_CODE_404).send({ message: error.message });
+    case 'ValidationError':
+      return res.status(ERROR_CODE_400).send({ message: error.message });
     default:
       return res.status(ERROR_CODE_400).send({ message: 'Validation Error' });
   }

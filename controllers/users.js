@@ -40,14 +40,19 @@ const createUser = (req, res) => {
 
 const updateProfile = (req, res) => {
   User.findOneAndUpdate(
-    { _id: validateObjectId(req.params.id) },
-    { ...req.body },
+    { _id: validateObjectId(req.user._id) },
+    {
+      name: req.body.name,
+      about: req.body.about,
+    },
     {
       runValidators: true,
       new: true,
     },
   )
-    .orFail(() => res.status(ERROR_CODE_400).send('Request is invalid'))
+    .orFail(() => {
+      throw new Error('User is not found');
+    })
     .then((user) => {
       res.status(SUCCESS_CODE_200).send(user);
     })
@@ -56,14 +61,16 @@ const updateProfile = (req, res) => {
 
 const updateProfileAvatar = (req, res) => {
   User.findOneAndUpdate(
-    { _id: validateObjectId(req.params.id) },
-    { ...req.body },
+    { _id: validateObjectId(req.user._id) },
+    { avatar: req.body.avatar },
     {
       runValidators: true,
       new: true,
     },
   )
-    .orFail(() => res.status(ERROR_CODE_400).send('Request is invalid'))
+    .orFail(() => {
+      throw new Error('User is not found');
+    })
     .then((user) => {
       res.status(SUCCESS_CODE_200).send(user);
     })
